@@ -1,0 +1,45 @@
+
+syntax = "proto3";
+
+option csharp_namespace = "SensorGrpcServer";
+
+package sensor;
+import "google/protobuf/timestamp.proto";
+
+message Direction
+{
+  float x = 1;
+  float y = 2;
+}
+
+// The greeting service definition.
+service SensorService {
+  // Sends a greeting
+  rpc SubscribeToSensor (SensorUpdateRequest) returns (stream SensorUpdate);
+  rpc ModifySubscriptionToSensor(SensorModificationRequest) returns (SensorModificationUpdate);
+}
+
+// The request message containing the user's name.
+message SensorUpdateRequest {
+}
+
+
+// The response message containing the greetings.
+message SensorUpdate {
+  google.protobuf.Timestamp timestamp = 1;
+  string message = 2;
+  double speed = 3;
+  bool is_active = 4;
+  optional
+  Direction dir = 5;
+}
+
+message SensorModificationRequest{
+  int32 gear = 1;
+}
+
+message SensorModificationUpdate{
+  google.protobuf.Timestamp timestamp = 1;
+  bool is_success = 2;
+  int32 using_gear = 3;
+}
